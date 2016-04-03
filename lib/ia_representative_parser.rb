@@ -43,7 +43,19 @@ class IARepresentativeParser < InvestorRecordParser
     end
 
     def find_registration_history
-
+      row = find_row_with_header("registration history")
+      return [] if row.nil?
+      table = row.css("table tr")
+      header = table.shift
+      table.map do |row|
+        firm_info = row.css("td").first.text
+        {
+          firm_name: firm_info.split(/\(iard/i).first.strip,
+          firm_iard: firm_info[/\d+/],
+          firm_location: firm_info.split("-").last.gsub(/^\W*/, "").strip,
+          dates: row.css("td")[1] && row.css("td")[1].text.strip
+        }
+      end
     end
 
     def find_disclosure_information

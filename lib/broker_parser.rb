@@ -10,7 +10,6 @@ class BrokerParser < InvestorRecordParser
       Broker
     end
 
-
     def find_crd
       doc.css(".summarydisplaycrd").text[/\d+/]
     end
@@ -19,8 +18,8 @@ class BrokerParser < InvestorRecordParser
       summaryheader = doc.css(".summaryheadertext").first
       if summaryheader
         summaryheader = summaryheader.text.strip
+        licensed = summaryheader[/not licensed/i] ? false : true
       end
-      licensed = summaryheader[/not licensed/i] ? false : true
     end
 
     def find_disclosures
@@ -37,21 +36,45 @@ class BrokerParser < InvestorRecordParser
     end
 
     def find_years_in_securities_industry
+      doc.text.match(/.*(\d+).*year\(s\).*in securities industry/i)
     end
 
     def find_passed_exams
+      doc.css("#examSection .summaryheadertext").text[/\d+/]
     end
 
     def find_current_registrations
+      current_reg = doc.css("#registrationSection .currregfirstcolumn")
+      current_reg.map do |column|
+        firm_info = column.parent.css(".currregsecondcolumn").text.strip
+        {
+          firm_name: firm_info.split(/\(crd/i)[0].strip,
+          firm_crd: firm_info[/\d+/],
+          since: column.parent.css(".currregfirstcolumn").text[/\d{2}\/\d{4}/]
+        }
+      end
     end
 
-
     def find_past_registrations
+      prev_reg = doc.css("#prevregistrationSection .prevregfirstcolumn")
+      prev_reg.map do |column|
+        firm_info = column.parent.css(".prevregsecondcolumn").text.strip
+        {
+          dates: column.parent.css(".prevregfirstcolumn").text.gsub(/\s|\r|\n/,"").strip,
+          firm_name: firm_info.split(/\(crd/i)[0].strip,
+          firm_crd: firm_info[/\d+/]
+        }
+      end
     end
 
     def find_alternate_names
+      alts = doc.text.match(/alternate names:(.*)/i)
+      if alts && alts[1]
+        alts[1].split(",").map(&:strip)
+      else
+        []
+      end
     end
-
   end
 
 end
