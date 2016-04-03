@@ -49,5 +49,4 @@ class SecClient
 		"http://www.adviserinfo.sec.gov/IAPD/IAPDIndvlSummary.aspx?INDVL_PK=#{id}"
 	end
 
-
 end

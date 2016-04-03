@@ -1,29 +1,14 @@
 require 'pry'
-require 'nokogiri'
+require_relative './investor_record_parser'
 
-class IARepresentativeParser
+class IARepresentativeParser < InvestorRecordParser
 
   class << self
-    attr_accessor :doc
-
-    def create(html)
-      @doc = Nokogiri::HTML(html)
-      IARepresentative.new(parsed_doc)
-    end
 
     private
 
-    def parsed_doc
-      {
-        name: find_name,
-        crd: find_crd,
-        last_updated: find_last_updated,
-        current_employers: find_current_employers,
-        qualifications: find_current_qualifications,
-        registration_history: find_registration_history,
-        disclosure_information: find_disclosure_information,
-        broker_dealer_information: find_broker_dealer_information
-      }
+    def target_class
+      IARepresentative
     end
 
     def find_name
@@ -46,13 +31,14 @@ class IARepresentativeParser
 
     def find_current_qualifications
       qual_row = find_row_with_header("qualifications")
-      jurisdictions = qual_row.text.match(/currently registered.*(\d+).*jurisdiction/)[1]
       suspended_regex = /suspended.*jurisdiction[.]*\?[\\n|\b|\s]*([a-zA-Z]+)[\\n|\b|\s]*/i
-      suspended = qual_row.text.match(suspended_regex)[1]
-      suspended = suspended == "No" ? false : true
+      if qual_row
+        jurisdictions = qual_row.text.match(/currently registered.*(\d+).*jurisdiction/)[1]
+        suspended = qual_row.text.match(suspended_regex)[1] == "Yes"
+      end
       {
         jurisdictions: jurisdictions,
-        suspended: suspended
+        suspended: suspended || "No"
       }
     end
 
@@ -69,7 +55,9 @@ class IARepresentativeParser
     end
 
     def find_row_with_header(header, tag = "h4")
-      row = doc.css("#{tag}").find { |x| x.text[Regexp.new("#{header}", "i")] }.parent
+      row = doc.css("#{tag}").find { |x| x.text[Regexp.new("#{header}", "i")] }
+      return if row.nil?
+      row = row.parent
       while row.xpath("@class").text != "bcrow"
         row = row.parent
       end

@@ -6,4 +6,10 @@ RSpec.describe IARepresentative do
 		expect(described_class.new).to_not be_nil
 	end
 
+	describe "#initialize" do
+
+		it "takes an HTML "
+
+	end
+
 end

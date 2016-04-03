@@ -81,6 +81,6 @@ RSpec.configure do |config|
 
 end
 
-Dir.glob(File.expand_path("../../lib/**/**/*.rb", __FILE__)).each do |file|
+Dir[File.expand_path("../../lib/**/*.rb", __FILE__)].each do |file|
 	require file
 end

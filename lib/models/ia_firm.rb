@@ -1,5 +1,11 @@
-class IAFirm
+require_relative './investor_record'
 
-	attr_accessor :name, :crd, :jurisdiction, :registration_status, :effective_date
+class IAFirm < InvestorRecord
+
+	FIELDS = [
+    :name, :crd, :jurisdiction, :registration_status, :effective_date
+  ]
+
+  attr_accessor *FIELDS
 
 end
