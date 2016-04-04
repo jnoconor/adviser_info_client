@@ -43,11 +43,8 @@ class IARepresentativeParser < InvestorRecordParser
     end
 
     def find_registration_history
-      row = find_row_with_header("registration history")
-      return [] if row.nil?
-      table = row.css("table tr")
-      header = table.shift
-      table.map do |row|
+      table_rows = find_table_rows_under_header("registration history")
+      table_rows.map do |row|
         firm_info = row.css("td").first.text
         {
           firm_name: firm_info.split(/\(iard/i).first.strip,
@@ -59,11 +56,29 @@ class IARepresentativeParser < InvestorRecordParser
     end
 
     def find_disclosure_information
-
+      table_rows = find_table_rows_under_header("disclosure information")
+      table_rows.map do |row|
+        type, count = row.css("td").map(&:text)
+        {
+          type: type,
+          count: count
+        }
+      end
     end
 
     def find_broker_dealer_information
+      row = find_row_with_header("broker dealer information")
+      return "Not a broker" if row.nil?
+      # TODO figure out what to do with this
+      row.css("a").attr("href").value
+    end
 
+    def find_table_rows_under_header(header)
+      row = find_row_with_header(header)
+      return [] if row.nil?
+      table_rows = row.css("table tr")
+      header = table_rows.shift
+      table_rows
     end
 
     def find_row_with_header(header, tag = "h4")
