@@ -8,4 +8,10 @@ class IAFirm < InvestorRecord
 
   attr_accessor *FIELDS
 
+  private
+
+  def fields
+    FIELDS
+  end
+
 end

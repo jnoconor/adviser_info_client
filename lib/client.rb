@@ -3,7 +3,7 @@ require 'open-uri'
 require 'net/http'
 require_relative './models/ia_representative'
 require_relative './history'
-require_relative './ia_representative_parser'
+Dir[File.expand_path("./services/**/*.rb", __FILE__)].each { |f| require f }
 
 class SecClient
   class RemoteRecordNotFound < StandardError; end
@@ -25,7 +25,7 @@ class SecClient
       get_ia_firm(id) ||
       get_broker(id) ||
       get_broker_firm(id)
-    raise RemoteRecordNotFound.new("Record #{id} not found")
+    raise RemoteRecordNotFound.new("Record #{id} not found") if record.nil?
 
     after_get(record)
   end
@@ -64,11 +64,11 @@ class SecClient
     resp = Net::HTTP.get_response(uri)
     raise RemoteServerError.new("There was a problem accessing the requested URI: #{uri}") if resp.nil?
     return if record_not_found(resp)
-    parser.create(html)
+    parser.create(resp.body)
   end
 
   def record_not_found(resp)
-    resp.status != "200" || resp.body[/no result/i]
+    resp.code != "200" || resp.body[/no result/i]
   end
 
   def after_get(object)
@@ -77,19 +77,19 @@ class SecClient
   end
 
 	def ia_representative_uri(id)
-		"#{adviser_info_base_uri}/IAPDIndvlSummary.aspx?INDVL_PK=#{id}"
+		URI("#{adviser_info_base_uri}/IAPDIndvlSummary.aspx?INDVL_PK=#{id}")
 	end
 
   def ia_firm_uri(id)
-    "#{adviser_info_base_uri}/IAPDFirmSummary.aspx?ORG_PK=#{id}"
+    URI("#{adviser_info_base_uri}/IAPDFirmSummary.aspx?ORG_PK=#{id}")
   end
 
   def broker_uri(id)
-    "#{brokercheck_base_uri}/Individual/Summary/#{id}"
+    URI("#{brokercheck_base_uri}/Individual/Summary/#{id}")
   end
 
   def broker_firm_uri(id)
-    "#{brokercheck_base_uri}/Firm/Summary/#{id}"
+    URI("#{brokercheck_base_uri}/Firm/Summary/#{id}")
   end
 
   def brokercheck_base_uri
