@@ -36,7 +36,8 @@ class BrokerParser < InvestorRecordParser
     end
 
     def find_years_in_securities_industry
-      doc.text.match(/.*(\d+).*year\(s\).*in securities industry/i)
+      match = doc.text.match(/.*(\d+).*year\(s\).*in securities industry/i)
+      match[1] if match
     end
 
     def find_passed_exams
