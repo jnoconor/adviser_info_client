@@ -3,7 +3,7 @@ require_relative './investor_record'
 class IAFirm < InvestorRecord
 
 	FIELDS = [
-    :name, :crd, :jurisdiction, :registration_status, :effective_date
+    :name, :crd, :jurisdictions, :notice_filings, :exempt_reporting_advisers
   ]
 
   attr_accessor *FIELDS

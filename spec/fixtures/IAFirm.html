@@ -366,16 +366,38 @@ function __doPostBack(eventTarget, eventArgument) {
 <div>
 
 
+            <table class="table table-bordered" id="tbNtcStatus">
+                <tr>
+                    <th>JURISDICTION</th>
+                    <th>EFFECTIVE DATE</th>
+                </tr>
 
-    <div id="ctl00_cphMain_RegStatus_pnlNotStatus">
+            <tr>
+    <td>Delaware</td>
+    <td>03/28/2013</td>
+</tr>
 
-        <p>
-            <span id="ctl00_cphMain_RegStatus_lblNotStatus" class="not-registered">Not Currently Notice Filed</span>
-        </p>
+
+            <tr>
+    <td>New York</td>
+    <td>03/30/2016</td>
+</tr>
+
+
+            <tr>
+    <td>Texas</td>
+    <td>03/28/2013</td>
+</tr>
+
+
+            </table>
+
+
 
 </div>
-</div>
+
 <br />
+
 <div class="gray-box-summarysubtitle">
     <h4 class="inline">EXEMPT REPORTING ADVISERS</h4>
 </div>
@@ -392,14 +414,33 @@ function __doPostBack(eventTarget, eventArgument) {
 <br />
 <div>
 
+            <table class="table table-bordered" id="tbERAStatus">
+                <tr>
+                    <th>SEC / Jurisdiction</th>
+                    <th>REPORTING STATUS
+                            <a href="#" data-toggle="modal" data-target="#myModalERA" title="registration status"><span title="Help" class="fa fa-question-circle fa-fw icon"><span style="display: none;">_</span> </span></a>
+                    </th>
+                    <th>EFFECTIVE DATE</th>
+                </tr>
 
-    <div id="ctl00_cphMain_RegStatus_pnlERAStatus">
+            <tr>
+    <td>SEC</td>
+    <td>ERA - Active</td>
+    <td>03/30/2012</td>
+</tr>
 
-        <p>
-            <span id="ctl00_cphMain_RegStatus_lblERAStatus" class="not-registered">Not Currently an Exempt Reporting Adviser</span>
-        </p>
 
-</div>
+            <tr>
+    <td>Minnesota</td>
+    <td>ERA - Active</td>
+    <td>04/08/2014</td>
+</tr>
+
+
+            </table>
+
+
+
 </div>
 
 
@@ -426,37 +467,37 @@ function __doPostBack(eventTarget, eventArgument) {
                     <tr>
                         <td>Approved</td>
                         <td>Adviser's registration is approved by
-                        SEC / jurisdiction(s).</td>
+                                                SEC / jurisdiction(s).</td>
                         <td class='center'>X</td>
                         <td class='center'>X</td>
                     </tr>
                     <tr>
                         <td>120-day Approval</td>
                         <td>Adviser's registration is approved, subject
-                        to the conditions of the 120-day rule (Rule 203A-2(c)).</td>
+                                                to the conditions of the 120-day rule (Rule 203A-2(c)).</td>
                         <td class='center'>X</td>
                         <td class='center'>&nbsp;</td>
                     </tr>
                     <tr>
                         <td>*Conditional Restricted</td>
                         <td>A registration status indicating that the firm
-        is allowed to work in a restricted fashion, such as requirements
-        for extra supervision.</td>
+                is allowed to work in a restricted fashion, such as requirements
+                for extra supervision.</td>
                         <td class='center'>&nbsp;</td>
                         <td class='center'>X</td>
                     </tr>
                     <tr>
                         <td>*Limited</td>
                         <td>A registration status indicating the firm is operating
-                        in a 'limited' capacity, such as only being
-                        able to sell mutual funds.</td>
+                                                in a 'limited' capacity, such as only being
+                                                able to sell mutual funds.</td>
                         <td class='center'>&nbsp;</td>
                         <td class='center'>X</td>
                     </tr>
                     <tr>
                         <td>*Suspended</td>
                         <td>SEC / jurisdiction(s) has suspended adviser's
-                        registration for a specified period of time.
+                                                registration for a specified period of time.
                         </td>
                         <td class='center'>X</td>
                         <td class='center'>X</td>
@@ -470,7 +511,7 @@ function __doPostBack(eventTarget, eventArgument) {
                     <tr>
                         <td>Failure to Renew</td>
                         <td>A registration status prompted by an IA that did not pay
-                        renewals fees.</td>
+                                                renewals fees.</td>
                         <td class='center'>&nbsp;</td>
                         <td class='center'>X</td>
                     </tr>
@@ -483,7 +524,7 @@ function __doPostBack(eventTarget, eventArgument) {
                     <tr>
                         <td>*Canceled</td>
                         <td>SEC / jurisdiction(s) cancel adviser's registration pursuant to
-                        cancellation order. </td>
+                                                cancellation order. </td>
                         <td class='center'>X</td>
                         <td class='center'>X</td>
                     </tr>
