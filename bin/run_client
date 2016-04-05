@@ -1,0 +1,13 @@
+#! /usr/bin/env ruby
+require 'pry'
+require File.expand_path("./lib/client")
+
+client = SecClient.new
+puts "defined SecClient as client"
+puts "methods available:"
+puts
+puts "client.get_one(id) - gets a single IARep, IAFirm, Broker, or BrokerFirm"
+puts "client.get(ids) - gets a collection of investor record objects"
+puts "client.history - lists all of the objects fetched by the client"
+puts
+Pry.start
