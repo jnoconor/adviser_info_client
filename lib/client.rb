@@ -1,9 +1,9 @@
 require 'pry'
 require 'open-uri'
 require 'net/http'
-require_relative './models/ia_representative'
 require_relative './history'
 Dir[File.expand_path("./services/**/*.rb", __FILE__)].each { |f| require f }
+Dir[File.expand_path("./models/**/*.rb", __FILE__)].each { |f| require f }
 
 class SecClient
   class RemoteRecordNotFound < StandardError; end
@@ -20,7 +20,15 @@ class SecClient
 		@history = History.new(config)
 	end
 
-	def get(id, opts = {})
+  def get(id, opts = {})
+    if id.respond_to? :each
+      id.each { |id| get_one(id, opts) rescue RemoteRecordNotFound }
+    else
+      get_one(id, opts)
+    end
+  end
+
+	def get_one(id, opts = {})
     record = get_ia_representative(id) ||
       get_ia_firm(id) ||
       get_broker(id) ||
