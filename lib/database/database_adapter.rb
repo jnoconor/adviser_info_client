@@ -33,7 +33,7 @@ class NullDatabaseAdapter
 
     def query(query, values)
       puts "WARNING: no database configured. Query will not execute."
-      puts query + values
+      puts "#{query} #{values}"
       false
     end
 

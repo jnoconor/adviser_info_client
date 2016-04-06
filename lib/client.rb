@@ -44,12 +44,12 @@ module AdviserInfo
 
   	def write_all(file_path, format = :csv)
       raise "File path not provided" unless file_path
-      history.list.each { |r| r.write(file_path, format) }
+      history.list.each { |r| r[:object].write(file_path, format) }
   	end
 
   	def save_all
       raise "Database not configured" unless db_adapter
-      history.list.each(&:save)
+      history.list.each { |r| r[:object].save }
   	end
 
   	def history

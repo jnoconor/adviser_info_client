@@ -53,7 +53,13 @@ class InvestorRecord
   end
 
   def db_values
-    fields.map { |f| send(f) }
+    fields.map do |f|
+      value = send(f)
+      if value.respond_to? :each
+        value = JSON.unparse(value)
+      end
+      value
+    end
   end
 
 end
