@@ -1,0 +1,4 @@
+#! /usr/bin/env bash
+
+echo "starting DB server in background"
+postgres -D /usr/local/var/postgres &
