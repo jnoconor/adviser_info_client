@@ -33,11 +33,17 @@ class IARepresentativeParser < InvestorRecordParser
       qual_row = find_row_with_header("qualifications")
       suspended_regex = /suspended.*jurisdiction[.]*\?[\\n|\b|\s]*([a-zA-Z]+)[\\n|\b|\s]*/i
       if qual_row
-        jurisdictions = qual_row.text.match(/currently registered.*(\d+).*jurisdiction/)[1]
-        suspended = qual_row.text.match(suspended_regex)[1] == "Yes"
+        jurisdictions = qual_row.text.match(/currently registered.*(\d+).*jurisdiction/)
+        if jurisdictions
+          jurisdictions = jurisdictions[1]
+        end
+        suspended = qual_row.text.match(suspended_regex)
+        if suspended
+          suspended = suspended[1] == "Yes"
+        end
       end
       {
-        jurisdictions: jurisdictions,
+        jurisdictions: jurisdictions || 0,
         suspended: suspended || "No"
       }
     end
