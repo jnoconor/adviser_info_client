@@ -10,20 +10,22 @@ class InvestorRecord
     @db_adapter = db_adapter
   end
 
-  def write(file_path, format)
-    raise "Define #write in child class"
-  end
-
   def save
     db_adapter.query("INSERT INTO #{table} (#{db_columns}) VALUES (#{db_placeholders})", db_values)
   end
 
   def write(file_path, format)
-    File.open(file_path, "w+") { |f| f.write(self.send("to_#{format}"))}
+    File.open(file_path, "a+") { |f| f.write(self.send("to_#{format}") + "\n") }
   end
 
   def to_csv
-    fields.map { |f| send(f) }.join(",")
+    fields.map do |f|
+      value = send(f)
+      if value.respond_to? :each
+        value = JSON.unparse(value)
+      end
+      value
+    end.join(",")
   end
 
   def to_json

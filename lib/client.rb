@@ -49,7 +49,7 @@ module AdviserInfo
 
   	def save_all
       raise "Database not configured" unless db_adapter
-      history.list.each { |r| r.save(db_adapter)}
+      history.list.each(&:save)
   	end
 
   	def history
