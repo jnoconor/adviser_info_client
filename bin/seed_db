@@ -20,16 +20,17 @@ config = {
 }
 puts "instantiating client with config #{config}..."
 client = AdviserInfo::Client.new(config)
+crds = File.readlines(file_path)
 
 crds.each_with_index do |crd, index|
   if index % 10 == 0
     puts "scraping number #{index+1}"
   end
-  record = client.get(crd, type: type.to_sym)
-  if index % 10 == 0
-    puts "saving number #{index+1}: crd #{crd}"
-  end
   begin
+    record = client.get(crd, type: type.to_sym)
+    if index % 10 == 0
+      puts "saving number #{index+1}: crd #{crd}"
+    end
     record.save
   rescue => e
     puts e

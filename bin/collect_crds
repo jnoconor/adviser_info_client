@@ -1,7 +1,7 @@
 #! /usr/bin/env ruby
 # writes crds to tmp/crds_#{type}
-# usage: `collect_crds`
-
+# usage: `collect_crds {firm,rep} path/to/source.xml`
+require 'pry'
 type = ARGV[0]
 file_path = ARGV[1]
 
@@ -17,11 +17,11 @@ def get_firm_crds(doc)
 end
 
 def get_rep_crds(doc)
-  doc.xpath("//Indvl").each_with_index.map do |info, index|
+  doc.xpath("//Indvl/Info").each_with_index.map do |info, index|
     if index % 50 == 0
       puts "grabbing number #{index+1}..."
     end
-    info.attr("indvlPk")
+    info.attr("indvlPK")
   end
 end
 
