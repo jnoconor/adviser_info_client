@@ -1,4 +1,5 @@
 require 'pg'
+require 'pry'
 
 class DatabaseAdapter
 
@@ -8,19 +9,16 @@ class DatabaseAdapter
 
     def connect(config)
       return NullDatabaseAdapter unless config
-      host = config[:host]
-      port = config[:port]
-      user = config[:user]
-      password = config[:password]
-      @handle ||= PGconnect
+      @handle ||= PG.connect(config)
     end
 
-    # insert into table (a,b,c) values (?,?,?)
+    # insert into table (a,b,c) values ($1,$2,$3)
     def query(query, values)
-      handle.execute(query, values)
+      handle.exec(query, values)
     end
 
     def disconnect
+      @handle.close
       @handle = nil
     end
 
@@ -35,7 +33,7 @@ class NullDatabaseAdapter
 
     def query(query, values)
       puts "WARNING: no database configured. Query will not execute."
-      puts query, values
+      puts query + values
       false
     end
 
