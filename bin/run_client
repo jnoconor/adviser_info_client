@@ -2,8 +2,8 @@
 require 'pry'
 require File.expand_path("./lib/client")
 
-client = SecClient.new
-puts "defined SecClient as client"
+client = AdviserInfo::Client.new
+puts "defined AdviserInfo::Client as client"
 puts "methods available:"
 puts
 puts "client.get_one(id) - gets a single IARep, IAFirm, Broker, or BrokerFirm"

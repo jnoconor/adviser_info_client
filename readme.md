@@ -5,7 +5,7 @@ example usages
 # optional config
 config = {}
 
-client = SecClient.new(config)
+client = AdviserInfo::Client.new(config)
 
 client.get_one(id) # gets a single IARep, IAFirm, Broker, or BrokerFirm
 

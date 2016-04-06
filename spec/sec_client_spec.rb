@@ -1,5 +1,5 @@
 
-RSpec.describe SecClient do
+RSpec.describe AdviserInfo::Client do
 
   before do
     WebMock.disable_net_connect!
@@ -9,7 +9,7 @@ RSpec.describe SecClient do
     @broker_firm_uri_stub = stub_request(:get, described_class.new.send(:broker_firm_uri, 1)).to_return({status: 302})
   end
 
-  let(:client) { SecClient.new }
+  let(:client) { AdviserInfo::Client.new }
   let(:id) { 1 }
 
   it "exists" do
@@ -20,7 +20,7 @@ RSpec.describe SecClient do
 
     context "when the CRD is invalid" do
       it "raises an error" do
-        expect{ client.get(1) }.to raise_error(described_class::RemoteRecordNotFound)
+        expect{ client.get(1, type: :firm) }.to raise_error(AdviserInfo::RemoteRecordNotFound)
       end
     end
 
@@ -32,7 +32,7 @@ RSpec.describe SecClient do
       end
 
       it "returns an IARepresentative" do
-        expect(client.get(1)).to be_instance_of(IARepresentative)
+        expect(client.get(1, type: :rep)).to be_instance_of(IARepresentative)
       end
     end
 
@@ -44,7 +44,7 @@ RSpec.describe SecClient do
       end
 
       it "returns an IAFirm" do
-        expect(client.get(id)).to be_instance_of(IAFirm)
+        expect(client.get(id, type: :firm)).to be_instance_of(IAFirm)
       end
     end
 
@@ -56,7 +56,7 @@ RSpec.describe SecClient do
       end
 
       it "returns a Broker" do
-        expect(client.get(id)).to be_instance_of(Broker)
+        expect(client.get(id, type: :rep)).to be_instance_of(Broker)
       end
     end
 
@@ -68,7 +68,7 @@ RSpec.describe SecClient do
       end
 
       it "returns a BrokerFirm" do
-        expect(client.get(id)).to be_instance_of(BrokerFirm)
+        expect(client.get(id, type: :firm)).to be_instance_of(BrokerFirm)
       end
     end
   end
