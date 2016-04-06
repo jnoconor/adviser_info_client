@@ -2,12 +2,23 @@
 require 'pry'
 require File.expand_path("./lib/client")
 
-client = AdviserInfo::Client.new
+database_config = {
+  host: "localhost",
+  port: 5432,
+  user: "admin",
+  password: "",
+  dbname: "dev"
+}
+client = AdviserInfo::Client.new(database: database_config)
 puts "defined AdviserInfo::Client as client"
+puts "connected to database #{database_config[:dbname]} as #{database_config[:user]}"
+puts
 puts "methods available:"
 puts
 puts "client.get_one(id) - gets a single IARep, IAFirm, Broker, or BrokerFirm"
 puts "client.get(ids) - gets a collection of investor record objects"
 puts "client.history - lists all of the objects fetched by the client"
+puts "client.save - save to database"
+puts "client.write(file_path, format) - write to file at file_path in :csv or :json"
 puts
 Pry.start

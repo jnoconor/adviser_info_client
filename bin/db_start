@@ -1,4 +1,7 @@
 #! /usr/bin/env bash
 
 echo "starting DB server in background"
-postgres -D /usr/local/var/postgres &
+postgres -D /usr/local/var/postgres
+pwd="${BASH_SOURCE[0]}"
+parent=$(dirname "$pwd")
+psql -f $(dirname "$parent")/lib/database/create.sql dev
