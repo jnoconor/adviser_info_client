@@ -1,0 +1,43 @@
+#! /usr/bin/env ruby
+# writes crds to tmp/crds_#{type}
+# usage: `collect_crds`
+
+type = ARGV[0]
+file_path = ARGV[1]
+
+require 'nokogiri'
+
+def get_firm_crds(doc)
+  doc.xpath("//Info").each_with_index.map do |info, index|
+    if index % 50 == 0
+      puts "grabbing number #{index+1}..."
+    end
+    info.attr("FirmCrdNb")
+  end
+end
+
+def get_rep_crds(doc)
+  doc.xpath("//Indvl").each_with_index.map do |info, index|
+    if index % 50 == 0
+      puts "grabbing number #{index+1}..."
+    end
+    info.attr("indvlPk")
+  end
+end
+
+puts "opening file..."
+file = File.open(file_path)
+puts "parsing into Nokogiri..."
+doc = Nokogiri::XML(file)
+puts "collecting CRDs..."
+if type == "firm"
+  crds = get_firm_crds(doc)
+elsif type == "rep"
+  crds = get_rep_crds(doc)
+end
+
+File.open("#{File.expand_path("./tmp")}/crds_#{type}", "w+") do |f|
+  crds.each do |crd|
+    f.write(crd + "\n")
+  end
+end

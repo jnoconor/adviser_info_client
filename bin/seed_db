@@ -1,0 +1,37 @@
+#! /usr/bin/env ruby
+# automated integration test
+# download source files from http://www.adviserinfo.sec.gov/IAPD/InvestmentAdviserData.aspx
+# usage: `seed_db {firm,rep} path/to/crds`
+require 'pry'
+
+type = ARGV[0]
+file_path = ARGV[1]
+raise "Need both type and file path to continue" unless type && file_path
+
+require File.expand_path("./lib/client")
+config = {
+  database: {
+    host: "localhost",
+    port: 5432,
+    user: "admin",
+    password: "",
+    dbname: "dev"
+  }
+}
+puts "instantiating client with config #{config}..."
+client = AdviserInfo::Client.new(config)
+
+crds.each_with_index do |crd, index|
+  if index % 10 == 0
+    puts "scraping number #{index+1}"
+  end
+  record = client.get(crd, type: type.to_sym)
+  if index % 10 == 0
+    puts "saving number #{index+1}: crd #{crd}"
+  end
+  begin
+    record.save
+  rescue => e
+    puts e
+  end
+end
