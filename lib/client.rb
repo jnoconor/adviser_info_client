@@ -5,16 +5,18 @@ require_relative './history'
 require_relative './errors'
 Dir[File.expand_path("../services/**/*.rb", __FILE__)].each { |f| require f }
 Dir[File.expand_path("../models/**/*.rb", __FILE__)].each { |f| require f }
+Dir[File.expand_path("../database/**/*.rb", __FILE__)].each { |f| require f }
 
 module AdviserInfo
   class Client
 
   	DEFAULT_ENDPOINT = "http://www.adviserinfo.sec.gov/"
 
-  	attr_reader :endpoint, :file_path
+  	attr_reader :endpoint, :file_path, :db_adapter
 
   	def initialize(config = {})
   		@endpoint = config[:endpoint] || DEFAULT_ENDPOINT
+      @db_adapter = DatabaseAdapter.connect(config[:database]) # returns nil if no config
   		@history = History.new(config)
   	end
 
@@ -42,12 +44,12 @@ module AdviserInfo
 
   	def write_all(file_path, format = :csv)
       raise "File path not provided" unless file_path
-      history.list.each { |r| r.write(format) }
+      history.list.each { |r| r.write(file_path, format) }
   	end
 
   	def save_all
-      raise "Database not configured" unless config[:database]
-      history.list.each(&:save)
+      raise "Database not configured" unless db_adapter
+      history.list.each { |r| r.save(db_adapter)}
   	end
 
   	def history
@@ -83,7 +85,7 @@ module AdviserInfo
       resp = Net::HTTP.get_response(uri)
       raise AdviserInfo::RemoteServerError.new("There was a problem accessing the requested URI: #{uri}") if resp.nil?
       return if record_not_found(resp)
-      parser.create(resp.body)
+      parser.create(resp.body, db_adapter)
     end
 
     def record_not_found(resp)

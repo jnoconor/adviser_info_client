@@ -6,6 +6,7 @@ gem 'nokogiri', '1.6.6.2'
 gem 'rspec'
 gem 'rspec-mocks'
 gem 'webmock'
+gem 'pg'
 
 group :development do
 	gem 'pry'

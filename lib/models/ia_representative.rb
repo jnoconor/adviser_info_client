@@ -18,4 +18,8 @@ class IARepresentative < InvestorRecord
     FIELDS
   end
 
+  def table
+    "ia_representatives"
+  end
+
 end

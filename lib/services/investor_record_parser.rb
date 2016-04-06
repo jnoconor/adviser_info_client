@@ -4,9 +4,9 @@ class InvestorRecordParser
   class << self
     attr_accessor :doc
 
-    def create(html)
+    def create(html, db_adapter = NullDatabaseAdapter)
       @doc = Nokogiri::HTML(html)
-      target_class.new(parsed_doc)
+      target_class.new(parsed_doc, db_adapter)
     end
 
     private
