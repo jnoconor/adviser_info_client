@@ -47,11 +47,11 @@ class InvestorRecord
   end
 
   def db_placeholders
-    fields.map { |_| "?" }.join(",")
+    fields.each_with_index.map { |_, i| "$#{i+1}" }.join(",")
   end
 
   def db_values
-    fields.map { |f| send(f) }.join(",")
+    fields.map { |f| send(f) }
   end
 
 end

@@ -29,12 +29,15 @@ class BrokerFirmParser < InvestorRecordParser
 
     def find_business_types
       row = find_row_from_img("registered")
+      return [] unless row
       types = row.css(".summaryheadertext").map { |n| n.text.strip }
     end
 
     def find_disclosures
       row = doc.css("#dvDiscContent")
-      row.css(".FirmNestedListItemColor").map do |n|
+      section = row.css(".FirmNestedListItemColor")
+      return {} unless section
+      section.map do |n|
         data = n.css("div")
         {
           type: data[0].text.strip,
@@ -45,6 +48,7 @@ class BrokerFirmParser < InvestorRecordParser
 
     def find_firm_details
       row = find_row_from_img("briefcase")
+      return {} unless row
       detail_section = row.css(".summarysectionrightpanel")
       date = detail_section.css(".summaryheadertext").text[/\d+\/\d+\/\d+/]
       address_section = detail_section.css(".firmprofilesecondcolumn .firmprofilecell").last
@@ -66,7 +70,9 @@ class BrokerFirmParser < InvestorRecordParser
     end
 
     def find_row_from_img(title_match)
-      row = doc.css(".summarysectionleftpanel img").find { |i| i.attr("src").match(title_match) }.parent
+      img = doc.css(".summarysectionleftpanel img").find { |i| i.attr("src").match(title_match) }
+      return unless img
+      row = img.parent
       while !row.xpath("@class").text.include?("bcrow")
         row = row.parent
       end

@@ -15,4 +15,8 @@ class IAFirm < InvestorRecord
     FIELDS
   end
 
+  def table
+    "ia_firms"
+  end
+
 end

@@ -14,4 +14,8 @@ class BrokerFirm < InvestorRecord
     FIELDS
   end
 
+  def table
+    "broker_firms"
+  end
+
 end

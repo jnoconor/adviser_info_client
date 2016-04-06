@@ -15,4 +15,7 @@ class Broker < InvestorRecord
     FIELDS
   end
 
+  def table
+    "brokers"
+  end
 end

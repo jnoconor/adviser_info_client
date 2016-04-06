@@ -8,7 +8,7 @@ RSpec.shared_examples "investor record" do
     expect(described_class.new({})).to be_instance_of described_class
   end
 
-  describe "#write" do
+  xdescribe "#write" do
 
     context "when the format is :csv" do
       it "writes the #{described_class} data to a row in a CSV file" do
@@ -21,7 +21,10 @@ RSpec.shared_examples "investor record" do
 
       end
     end
+  end
 
+  describe "#save" do
+    pending
   end
 
 end
